@@ -6,6 +6,7 @@ import json
 DATETIMEFORMAT = "%Y-%m-%dT%H:%M:%S.%f"
 DATEFORMAT = "%Y-%m-%d"
 TIMELABELFORMAT = "%H:%M:%S"
+ROOT = "cache"
 
 class EventDay:
     """Collects all event ids for a given day"""
@@ -25,19 +26,24 @@ class OEvent:
     - datatime: the timestamp of the event
     """
     def __init__(self, filepath: str):
+        self.filepath = Path(filepath)
         self.json = json.load(open(filepath))
         self.datetime = datetime.strptime(self.json["date"], DATETIMEFORMAT)
         self.id = self.json["id"]
         self.comment = self.json["comment"]
         self.attachments = self.json["attachments"]
 
-def events_from_folder(path: str) -> Dict[int, OEvent]:
+def events_from_folder(path: str = ROOT) -> Dict[int, OEvent]:
     """Loads the events from a given cache folder
 
     Events must be present as JSON data, see Event.
     Attachments must be downloaded as corresponding file
     """
     events = {}
+    folder = Path(path)
+    if not folder.exists():
+        os.makedirs(path)
+
     for file in Path(path).iterdir():
         if file.suffix == ".json":
             event = OEvent(str(file.absolute()))

@@ -40,7 +40,7 @@ class QEventWidget(QWidget):
         atts = 0
         self.open_attachments = []
         for att in oevent.attachments:
-            filename = Path(att["filename"])
+            filename = oevent.filepath.parent / att["filename"]
             if filename.suffix == ".png":
                 atts += 1
                 label = ImageLabel(filename)

@@ -14,7 +14,7 @@ def main():
     #retrieve_events(from_date=datetime.now() + timedelta(weeks=-6))
 
     app = QApplication([])
-    window = MainWindow(events_from_folder("."))
+    window = MainWindow(events_from_folder())
     window.show()
     app.exec_()
 
